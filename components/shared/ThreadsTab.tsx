@@ -43,6 +43,7 @@ const ThreadsTab = async ({
                 community={thread.community} // odo
                 createdAt={thread.createdAt}
                 comments={thread.children}
+                likes={thread.likes}
               />
             ))}
         </section>
