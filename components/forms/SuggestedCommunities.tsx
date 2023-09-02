@@ -1,31 +1,23 @@
-import ProfileHeader from "@/components/shared/ProfileHeader";
 import { fetchUser, fetchUsers } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { profileTabs } from "@/constants";
-import Image from "next/image";
-import ThreadsTab from "@/components/shared/ThreadsTab";
-import UserCard from "@/components/cards/UserCard";
 import { fetchCommunities } from "@/lib/actions/community.actions";
 import CommunityCard from "@/components/cards/CommunityCard";
+import CommunityArea from "../cards/CommunityArea";
 
-async function Page() {
+async function SuggestedCommunities() {
 
-    const user = await currentUser();
-
-    if(!user) return null;
-
-    const userInfo = await fetchUser(user.id);
+    
 
     //Fetch Communities
     const result = await fetchCommunities({
         searchString: '',
         pageNumber: 1,
-        pageSize: 25
+        pageSize: 20
     })
-    if(!userInfo?.onboarded) redirect('/onboarding');
+    
     return (
-        <section className="head-text mb-10">Communities
+        <section className="head-text mb-10">
         {/*Search bar*/}
         <div className="mt-14 flex flex-col gap-9">
             {result.communities.length === 0 ? (
@@ -33,14 +25,13 @@ async function Page() {
             ): (
                 <>
                 {result.communities.map((community) => (
-                    <CommunityCard
+                    <CommunityArea
                     key={community.id}
                     id={community.id}
                     name={community.name}
                     username={community.username}
                     imgUrl={community.image}
-                    bio={community.bio}
-                    members={community.members}
+                    
                     />
                 ))}
                 </>
@@ -52,4 +43,4 @@ async function Page() {
     )
 }
 
-export default Page;
+export default SuggestedCommunities;
